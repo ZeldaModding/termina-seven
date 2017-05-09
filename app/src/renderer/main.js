@@ -6,8 +6,6 @@ import Router from 'vue-router'
 import App from './App'
 import routes from './routes'
 
-const frida = require('frida')
-
 Vue.use(Electron)
 Vue.use(Resource)
 Vue.use(Router)
