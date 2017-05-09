@@ -1,6 +1,11 @@
 # termina-seven
 
-> stinky derrike
+After installing dependencies,
+you must grab `frida-v10.0.3-electron-v53-win32-x64.tar.gz`
+(or equivalent) from https://github.com/frida/frida/releases
+and overwrite `app/node_modules/frida/build/Release/frida_binding.node`.
+Otherwise, the program will not run.
+Hopefully this will be automated in the future.
 
 ## Build Setup
 
