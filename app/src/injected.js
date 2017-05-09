@@ -93,7 +93,7 @@ function findRomVersion() {
   return ["", false]
 }
 
-function findRam() {
+function findRam(swapped) {
   var ranges = Process.enumerateRangesSync("rw-")
   for (var i = 0; i < ranges.length; i++) {
     var range = ranges[i]
@@ -108,25 +108,13 @@ function findRam() {
       var addr = ptr(range.base)
       var bytes = Memory.readByteArray(addr.add(offset), ramSequence.length * 4)
       var view = new DataView(bytes)
-      var unswapped = view.getInt32(0, false)
-      var swapped = view.getInt32(0, true)
+
       var okay = true
-      if (unswapped == ramSequence[0]) {
-        for (var k = 1; k < ramSequence.length; k++) {
-          if (ramSequence[k] != view.getInt32(k * 4, false)) {
-            okay = false
-            break
-          }
+      for (var k = 1; k < ramSequence.length; k++) {
+        if (ramSequence[k] != view.getInt32(k * 4, swapped)) {
+          okay = false
+          break
         }
-      } else if (swapped == ramSequence[0]) {
-        for (var k = 1; k < ramSequence.length; k++) {
-          if (ramSequence[k] != view.getInt32(k * 4, true)) {
-            okay = false
-            break
-          }
-        }
-      } else {
-        okay = false
       }
 
       if (okay) {
@@ -142,7 +130,7 @@ var version = ret[0]
 var swapped = ret[1]
 
 if (version !== "") {
-  var addr = findRam()
+  var addr = findRam(swapped)
   send(swapped)
   send(version)
   send(addr)
