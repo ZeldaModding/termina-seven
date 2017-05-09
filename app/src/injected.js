@@ -131,9 +131,10 @@ var swapped = ret[1]
 
 if (version !== "") {
   var addr = findRam(swapped)
+  send('found_rom')
   send(swapped)
   send(version)
   send(addr)
 } else {
-  send("failed to find rom version")
+  send('no_rom')
 }
