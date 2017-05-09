@@ -7,6 +7,21 @@ and overwrite `app/node_modules/frida/build/Release/frida_binding.node`.
 Otherwise, the program will not run.
 Hopefully this will be automated in the future.
 
+## Resources
+### Compiling Frida against Electron
+* https://www.npmjs.com/package/electron-builder
+* https://github.com/electron/electron/blob/master/docs/tutorial/using-native-node-modules.md
+* https://github.com/nodegit/nodegit/issues/828
+
+### A JS Map Viewer, Using 010 Style Reading
+* http://magcius.github.io/dunky.js/
+
+### Editor UI / Scaffolding
+* https://github.com/xem/hex
+* http://xen.firefly.nu/up/zelda/tp/text/
+* http://xen.firefly.nu/up/zelda/tp/map/
+* https://github.com/FireyFly/mint-explorer
+
 ## Build Setup
 
 ``` bash
