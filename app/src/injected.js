@@ -20,9 +20,9 @@ const romNames = {
   oot_ej_2:     [0x693BA2AE|0, 0xB7F14E9F|0],
   oot_u_gc:     [0xF3DD35BA|0, 0x4152E075|0],
   oot_e_debug:  [0x917D18F6|0, 0x69BC5453|0],
-  oot_e_gc:     [0x1D4136F3|0, 0xAF63EEA9|0],
-  oot_j_gc:     [0xF43B45BA|0, 0x2F0E9B6F|0],
-  oot_u_gc:     [0xF034001A|0, 0xAE47ED06|0],
+  oot_e_mq:     [0x1D4136F3|0, 0xAF63EEA9|0],
+  oot_j_mq:     [0xF43B45BA|0, 0x2F0E9B6F|0],
+  oot_u_mq:     [0xF034001A|0, 0xAE47ED06|0],
 }
 
 const ramSequenceOffset = 0x20
