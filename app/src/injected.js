@@ -122,7 +122,6 @@ function findRam(swapped) {
       if (view.getInt32(0, swapped) == ramSequence[1]) {
         // MM (GC) versions have these instructions shifted left one word.
         start = 1
-        send("GC")
       }
 
       var okay = true
