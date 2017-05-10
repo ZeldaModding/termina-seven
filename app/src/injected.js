@@ -51,6 +51,7 @@ const ramSizeTries = [
   [0x1A0F000, 0x2180],   // Bizhawk
   [0x800000,  0],        // Project 64
   [0x1A2A000, 0x468A90], // mupen64-rerecording-v2
+  [0x1704000, 0x142A90], // mupen64-rerecording-v2 (if you open a GC rom?)
   [0x1A57000, 0x468A80], // mupen64-rerecording
 ]
 
@@ -112,9 +113,16 @@ function findRam(swapped) {
                                        ramSequence.length * 4)
       var view = new DataView(bytes)
 
+      var start = 0
+      if (view.getInt32(0, swapped) == ramSequence[1]) {
+        // MM (GC) versions have these instructions shifted left one word.
+        start = 1
+        send("GC")
+      }
+
       var okay = true
-      for (var k = 1; k < ramSequence.length; k++) {
-        if (ramSequence[k] != view.getInt32(k * 4, swapped)) {
+      for (var k = start; k < ramSequence.length; k++) {
+        if (view.getInt32((k - start) * 4, swapped) != ramSequence[k]) {
           okay = false
           break
         }
