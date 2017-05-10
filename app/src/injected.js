@@ -50,9 +50,14 @@ const ramSizeTries = [
   [0x801000,  0x20],     // mupen64plus
   [0x1A0F000, 0x2180],   // Bizhawk
   [0x800000,  0],        // Project 64
+  // NOTE: it might be easier to check 0x8ECA90 instead of using size heuristics.
   [0x1A2A000, 0x468A90], // mupen64-rerecording-v2
-  [0x1704000, 0x142A90], // mupen64-rerecording-v2 (if you open a GC rom?)
+  [0x1704000, 0x142A90],
+  [0x170C000, 0x142A90],
+  // NOTE: it might be easier to check 0x8EBA80 instead of using size heuristics.
   [0x1A57000, 0x468A80], // mupen64-rerecording
+  [0x1704000, 0x142A80],
+  [0x170C000, 0x142A80],
 ]
 
 function swap32(x) {
