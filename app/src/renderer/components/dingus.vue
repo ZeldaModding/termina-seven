@@ -2,22 +2,30 @@
 </template>
 
 <script>
-const fs = require('fs');
+const os = require('os')
+const fs = require('fs')
 const co = require('co')
 const frida = require('frida')
 
+const isWindows = os.type() == 'Windows_NT'
+
 const possibleNames = [
   "mupen64plus",
-  "mupen64plus.exe",
   "Project64",
-  "Project64.exe",
   "EmuHawk",
-  "EmuHawk.exe",
+  "mupen64-rerecording-v2",
+  "mupen64-rerecording",
+  // some variants I've seen in MHS files. please don't rename your EXEs.
+  "mupen64-rerecording-v2-reset",
+  "mupen64 (pause)",
 ]
 
 function* tryNames() {
   for (var i = 0; i < possibleNames.length; i++) {
     var processName = possibleNames[i]
+    if (isWindows) {
+      processName += ".exe"
+    }
     try {
       return yield frida.attach(processName)
     } catch(e) {

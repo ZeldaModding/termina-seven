@@ -25,8 +25,8 @@ const romNames = {
   oot_u_gc:     [0xF034001A|0, 0xAE47ED06|0],
 }
 
+const ramSequenceOffset = 0x20
 const ramSequence = [
-  // offset 0x20
   0x3C08A460|0,
   0x8D080010|0,
   0x31080002|0,
@@ -39,17 +39,19 @@ const ramSequence = [
 
 const romSizeTries = [
   // [size, offset]
-  [0x2001000, 0x30], // mupen64plus
-  [0x4001000, 0x30], // mupen64plus
+  [0x2001000, 0x30], // most versions of mupen
+  [0x4001000, 0x30], // most versions of mupen
   [0x2000000, 0x10], // Project 64
   [0x4000000, 0x10], // Project 64
 ]
 
 const ramSizeTries = [
   // [size, offset]
-  [0x801000,  0      + 0x40], // mupen64plus
-  [0x1A0F000, 0x2180 + 0x20], // Bizhawk
-  [0x800000,  0      + 0x20], // Project 64
+  [0x801000,  0x20],     // mupen64plus
+  [0x1A0F000, 0x2180],   // Bizhawk
+  [0x800000,  0],        // Project 64
+  [0x1A2A000, 0x468A90], // mupen64-rerecording-v2
+  [0x1A57000, 0x468A80], // mupen64-rerecording
 ]
 
 function swap32(x) {
@@ -106,7 +108,8 @@ function findRam(swapped) {
       }
 
       var addr = ptr(range.base)
-      var bytes = Memory.readByteArray(addr.add(offset), ramSequence.length * 4)
+      var bytes = Memory.readByteArray(addr.add(offset).add(ramSequenceOffset),
+                                       ramSequence.length * 4)
       var view = new DataView(bytes)
 
       var okay = true
@@ -118,7 +121,7 @@ function findRam(swapped) {
       }
 
       if (okay) {
-        return addr.add(offset).sub(0x20) // TODO: don't hardcode
+        return addr.add(offset)
       }
     }
   }
