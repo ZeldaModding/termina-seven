@@ -43,96 +43,87 @@ const os = require('os')
 const fs = require('fs')
 const co = require('co')
 const frida = require('frida')
-const Config = require('electron-config');
-const config = new Config();
+const Config = require('electron-config')
+const config = new Config()
 
-const isWindows = os.type() == 'Windows_NT'
+const isWindows = os.type() === 'Windows_NT'
 
 const possibleNames = [
-  "mupen64plus",
-  "Project64",
-  "EmuHawk",
-  "mupen64-rerecording-v2",
-  "mupen64-rerecording",
+  'mupen64plus',
+  'Project64',
+  'EmuHawk',
+  'mupen64-rerecording-v2',
+  'mupen64-rerecording',
   // some variants I've seen in MHS files. please don't rename your EXEs.
-  "mupen64-rerecording-v2-reset",
-  "mupen64 (pause)",
+  'mupen64-rerecording-v2-reset',
+  'mupen64 (pause)',
 ]
-
-/*
-let goodmeme =
-
-let runmeme = goodmeme().catch(err => {
-  console.error(err)
-})
-*/
-
-let runmeme = null
 
 export default {
   name: 'dingus',
-  data: function () {
+  data() {
     return {
       last_emu: config.get('last_emu'),
       found_emu: false,
       found_rom: false,
-      processName: ""
+      processName: '',
     }
   },
   methods: {
-    dingus_log: function () {
-      console.log( "thinking about " + this.last_emu )
+    dingus_log() {
+      console.log(`thinking about ${this.last_emu}`)
       config.set('last_emu', this.last_emu)
     },
-    rerun: function () {
-      runmeme = this.goodmeme().catch( err => {
+    rerun() {
+      this.goodmeme().catch(err => {
         console.error(err)
       })
     },
     tryNames: function* tryNames() {
-      for (var i = 0; i < possibleNames.length; i++) {
-        var processName = possibleNames[i]
+      for (let i = 0; i < possibleNames.length; i++) {
+        let processName = possibleNames[i]
         if (isWindows) {
-          processName += ".exe"
+          processName += '.exe'
         }
         this.processName = processName
         try {
           return yield frida.attach(this.processName)
-        } catch(e) {
+        } catch (e) {
           if (e.message !== 'Process not found') {
             this.found_emu = true
             throw e
           } else {
-            console.log("it wasn't " + processName + " this time: " + e.message)
+            console.log(`it wasn't ${processName} this time: ${e.message}`)
           }
         }
       }
       throw Error('failed to find an N64 emulator process')
     },
-    goodmeme: co.wrap(function* () {
-      console.log("seeking for emulators...")
+    goodmeme: co.wrap(function* goodmemeCo() {
+      console.log('seeking for emulators...')
       // FIXME: using the path like this will probably fail on production.
       const source = fs.readFileSync('app/src/injected.js').toString()
       const session = yield this.tryNames()
-      console.log( "it was " + this.processName )
+      console.log(`it was ${this.processName}`)
       this.found_emu = true
       const script = yield session.createScript(source)
 
       script.events.listen('message', message => {
+        let obj
         if (message.type === 'error') {
           console.error(message.description)
           return
         }
         try {
-          var obj = JSON.parse(message.payload)
-        } catch(e) {
+          obj = JSON.parse(message.payload)
+        } catch (e) {
           console.log(message)
           console.error(e)
           return
         }
         console.log(obj)
         if (typeof(obj) === 'object') {
-          if( 'found_rom' in obj ) {
+          if ('found_rom' in obj) {
             this.found_rom = obj.found_rom
             // if (!this.found_rom) { clear/reset stuff in this? }
           }
@@ -140,9 +131,9 @@ export default {
       })
 
       yield script.load()
-      console.log("script loaded")
-    })
-  }
+      console.log('script loaded')
+    }),
+  },
 }
 </script>
 

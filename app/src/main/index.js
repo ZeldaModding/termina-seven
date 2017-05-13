@@ -1,4 +1,4 @@
-'use strict'
+
 
 import { app, BrowserWindow } from 'electron'
 
@@ -7,13 +7,13 @@ const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:${require('../../../config').port}`
   : `file://${__dirname}/index.html`
 
-function createWindow () {
+function createWindow() {
   /**
    * Initial window options
    */
   mainWindow = new BrowserWindow({
     height: 600,
-    width: 800
+    width: 800,
   })
 
   mainWindow.loadURL(winURL)

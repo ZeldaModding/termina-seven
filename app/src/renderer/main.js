@@ -16,18 +16,18 @@ Vue.use(Router)
 Vue.use(BootstrapVue)
 Vue.config.debug = true
 
-const Config = require('electron-config');
-const config = new Config();
+const Config = require('electron-config')
+const config = new Config()
 
-console.log( config.get('last_rom') );
+console.log(config.get('last_rom'))
 
 const router = new Router({
   scrollBehavior: () => ({ y: 0 }),
-  routes
+  routes,
 })
 
 /* eslint-disable no-new */
 new Vue({
   router,
-  ...App
+  ...App,
 }).$mount('#app')
