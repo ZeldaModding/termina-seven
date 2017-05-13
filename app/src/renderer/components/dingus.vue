@@ -119,15 +119,19 @@ export default {
       const script = yield session.createScript(source)
 
       script.events.listen('message', message => {
-        console.log(message)
-        if( message.payload == 'found_rom' ) {
-          this.found_rom = true
-        } else if( message.payload == 'no_rom' ) {
-          console.log("failed to find rom version")
-        }
-
-        if( this.found_rom ) {
+        try {
+          var obj = JSON.parse(message.payload)
+        } catch(e) {
           console.log(message)
+          console.error(e)
+          return
+        }
+        console.log(obj)
+        if (typeof(obj) === 'object') {
+          if( 'found_rom' in obj ) {
+            this.found_rom = obj.found_rom
+            // if (!this.found_rom) { clear/reset stuff in this? }
+          }
         }
       })
 

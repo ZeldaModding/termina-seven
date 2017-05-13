@@ -140,14 +140,24 @@ function findRam(swapped) {
   return ""
 }
 
+function sendjson(obj) {
+  send(JSON.stringify(obj))
+}
+
 var ret = findRomVersion()
 var version = ret[0]
 var swapped = ret[1]
 
 if (version !== "") {
   var addr = findRam(swapped)
-  send('found_rom')
-  send("SWAPPED:" + swapped + ";VERSION:" + version + ";ADDRESS:" + addr + ";")
+  sendjson({
+    found_rom: true,
+    swapped: swapped,
+    version: version,
+    ram_addr: addr,
+  })
 } else {
-  send('no_rom')
+  sendjson({
+    found_rom: false,
+  })
 }
