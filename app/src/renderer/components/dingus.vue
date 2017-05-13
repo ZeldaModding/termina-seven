@@ -119,6 +119,10 @@ export default {
       const script = yield session.createScript(source)
 
       script.events.listen('message', message => {
+        if (message.type === 'error') {
+          console.error(message.description)
+          return
+        }
         try {
           var obj = JSON.parse(message.payload)
         } catch(e) {
